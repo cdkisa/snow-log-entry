@@ -1,18 +1,22 @@
-const areasData = [
+const zonesData = [
   {
     id: 1,
+    name: "stepsStairs",
     label: "Steps/Stairs"
   },
   {
     id: 2,
+    name: "sidewalks",
     label: "Sidewalks"
   },
   {
     id: 3,
+    name: "entrance",
     label: "Entrance"
   },
   {
     id: 4,
+    name: "parkingLot",
     label: "Parking Lot"
   }
 ];
@@ -20,14 +24,17 @@ const areasData = [
 const actionsData = [
   {
     id: 1,
+    name: "sand",
     label: "Sand"
   },
   {
     id: 2,
+    name: "iceMelt",
     label: "Ice Melt"
   },
   {
     id: 3,
+    name: "gravel",
     label: "Gravel"
   }
 ];
@@ -35,10 +42,12 @@ const actionsData = [
 const choicesData = [
   {
     id: 1,
+    name: "yes",
     label: "Yes"
   },
   {
     id: 2,
+    name: "no",
     label: "No"
   }
 ];
@@ -64,7 +73,7 @@ const weatherData = [
 
 class LogApi {
   fetchZones = async () => {
-    return areasData.map(area => ({
+    return zonesData.map(area => ({
       ...area,
       actions: actionsData.map(action => ({
         ...action,
@@ -80,8 +89,8 @@ class LogApi {
     }));
   };
 
-  fetchAreas = async () => areasData;
-  fetchArea = async id => areasData.find(x => x.id === id);
+  fetchAreas = async () => zonesData;
+  fetchArea = async id => zonesData.find(x => x.id === id);
 
   fetchActions = async () => actionsData;
   fetchAction = async id => actionsData.find(x => x.id === id);

@@ -5,19 +5,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
 import { useField } from "formik";
 
-const Title = ({ text, error, required }) => (
-  <FormHelperText
-    error={Boolean(error)}
-    required={required}
-    component={() => (
-      <Typography color={Boolean(error) ? "error" : "initial"}>
-        {text}
-      </Typography>
-    )}
-  />
-);
-
-const OneOfPicker = ({ title, items, name, ...props }) => {
+const OneOfPicker = ({ title, items, name }) => {
   const [field, meta, helpers] = useField(name);
   const { value, error } = meta;
   const { setValue } = helpers;
@@ -27,11 +15,21 @@ const OneOfPicker = ({ title, items, name, ...props }) => {
       ? { variant: "contained", color: "primary" }
       : { variant: "outlined", color: "default" };
 
+  const isError = Boolean(error);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={12}>
-        <Title text={title} error={Boolean(error)} required={true} />
+        <FormHelperText
+          error={isError}
+          component={() => (
+            <Typography color={isError ? "error" : "initial"}>
+              {title}
+            </Typography>
+          )}
+        />
       </Grid>
+      {isError && <FormHelperText error>{error}</FormHelperText>}
       {items &&
         items.map((item, index) => (
           <Grid key={`${index}_${item.id}`} item xs={12} sm>

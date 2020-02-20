@@ -17,8 +17,6 @@ const LogEntryWizardLayout = ({
   step,
   ...props
 }) => {
-  //console.log("form wrapper props", props);
-
   return (
     <Card>
       {status && (

@@ -18,22 +18,18 @@ const renderReviewComponents = stepInfoList =>
   stepInfoList
     .filter(x => x.reviewComponent != null)
     .map(stepInfo =>
-      React.createElement(stepInfo.reviewComponent, { stepInfo })
+      React.createElement(stepInfo.reviewComponent, {
+        key: stepInfo.id,
+        ...stepInfo
+      })
     );
 
 const SummaryInfo = () => {
   const formWizardContext = useFormikWizard();
-  console.log(formWizardContext);
-  // const stepInfoList = mergeContextWithDefinition(formWizardContext);
-  // console.log("Step Info List", stepInfoList);
-  // const reviewComponents = renderReviewComponents(stepInfoList);
-  // console.log(reviewComponents);
-  return (
-    <React.Fragment>
-      UNDER CONSTRUCTION
-      {/* {reviewComponents} */}
-    </React.Fragment>
-  );
+  console.log("SUMMARY CONTEXT", formWizardContext);
+  const stepInfoList = mergeContextWithDefinition(formWizardContext);
+  const reviewComponents = renderReviewComponents(stepInfoList);
+  return <React.Fragment>{/* {reviewComponents} */}</React.Fragment>;
 };
 
 export default SummaryInfo;

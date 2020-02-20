@@ -1,10 +1,12 @@
 import React from "react";
 import { format } from "date-fns";
 
-const DateTimeFormat = "MM/dd/yyyy hh:MM aaaa";
+const DateTimeFormat = "MM/dd/yyyy hh:MM a";
 
 export default ({ stepInfo }) => {
   console.log(stepInfo);
+  const { values } = stepInfo;
+  const { startDateTime, endDateTime } = values;
   return (
     <div>
       <h5>{stepInfo.stepTitle}</h5>

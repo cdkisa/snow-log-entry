@@ -1,5 +1,5 @@
-import { object, date, number, string } from "yup";
-import { isDate, differenceInMinutes, roundToNearestMinutes } from "date-fns";
+import { object, date, number } from "yup";
+import { isDate, differenceInMinutes } from "date-fns";
 import Where from "./views/Where";
 import WhereReview from "./views/WhereReview";
 import When from "./views/When";
@@ -10,96 +10,90 @@ import Zone from "./views/Zone";
 import ZoneReview from "./views/ZoneReview";
 import SummaryInfo from "./views/SummaryInfo";
 
-const transformToNearestMinute = value => nearestTo =>
-  isDate(value) ? roundToNearestMinutes(value, nearestTo) : value;
-
 const nullableDateSchema = label =>
   date()
     .label(label)
     .nullable()
-    .required(`${label} is required`)
-    .transform(value =>
-      transformToNearestMinute(value)({
-        nearestTo: 5
-      })
-    );
+    .required(`${label} is required`);
+
+const isIncrementOfFiveTest = {
+  name: "is-increment-of-five",
+  test: value => isDate(value) && value.getMinutes() % 5 === 0,
+  message: "${path} must be in increments of 5 minutes",
+  exclusive: true
+};
 
 const onAfterFormValidateAndSubmit = formValues =>
   console.log("form values:", formValues);
 
 export default [
-  // {
-  //   id: "where",
-  //   stepTitle: "Where did you work?",
-  //   component: Where,
-  //   reviewComponent: WhereReview,
-  //   initialValues: {
-  //     buildingId: 0
-  //   },
-  //   validationSchema: object({
-  //     buildingId: number()
-  //       .required("Required")
-  //       .min(1, "Building Required")
-  //   }),
-  //   onAction: onAfterFormValidateAndSubmit
-  // },
+  {
+    id: "where",
+    stepTitle: "Where did you work?",
+    component: Where,
+    reviewComponent: WhereReview,
+    initialValues: {
+      buildingId: 0
+    },
+    validationSchema: object({
+      buildingId: number().min(1, "Please select a location")
+    }),
+    onAction: onAfterFormValidateAndSubmit
+  },
 
-  // {
-  //   id: "when",
-  //   stepTitle: "When did you work?",
-  //   component: When,
-  //   reviewComponent: WhenReview,
-  //   initialValues: {
-  //     startDateTime: null,
-  //     endDateTime: null
-  //   },
-  //   validationSchema: object({
-  //     startDateTime: nullableDateSchema("Start Date/Time"),
-  //     endDateTime: nullableDateSchema("End Date/Time").when(
-  //       "startDateTime",
-  //       (startDateTime, schema) => {
-  //         if (isDate(startDateTime)) {
-  //           const MinDifferenceInMinutes = 5;
+  {
+    id: "when",
+    stepTitle: "When did you work?",
+    component: When,
+    reviewComponent: WhenReview,
+    initialValues: {
+      startDateTime: null,
+      endDateTime: null
+    },
+    validationSchema: object({
+      startDateTime: nullableDateSchema("Start Date/Time").test(
+        isIncrementOfFiveTest
+      ),
+      endDateTime: nullableDateSchema("End Date/Time")
+        .test(isIncrementOfFiveTest)
+        .when("startDateTime", (startDateTime, schema) => {
+          if (isDate(startDateTime)) {
+            const MinDifferenceInMinutes = 5;
 
-  //           return schema.test({
-  //             name: "difference",
-  //             params: {
-  //               startDateTime,
-  //               startDateLabel: "Start Date",
-  //               MinDifferenceInMinutes
-  //             },
-  //             message:
-  //               "${path} must at least ${MinDifferenceInMinutes} minutes after ${startDateLabel}",
-  //             test: endDateTime =>
-  //               differenceInMinutes(endDateTime, startDateTime) >=
-  //               MinDifferenceInMinutes
-  //           });
-  //         }
-  //       }
-  //     )
-  //   }),
-  //   onAction: onAfterFormValidateAndSubmit
-  // },
+            return schema.test({
+              name: "difference",
+              params: {
+                startDateTime,
+                startDateLabel: "Start Date",
+                MinDifferenceInMinutes
+              },
+              message:
+                "${path} must at least ${MinDifferenceInMinutes} minutes after ${startDateLabel}",
+              test: endDateTime =>
+                differenceInMinutes(endDateTime, startDateTime) >=
+                MinDifferenceInMinutes
+            });
+          }
+        })
+    }),
+    onAction: onAfterFormValidateAndSubmit
+  },
 
-  // {
-  //   id: "weather",
-  //   stepTitle: "What was the weather like?",
-  //   component: Weather,
-  //   reviewComponent: WeatherReview,
-  //   initialValues: {
-  //     priorWeatherId: 0,
-  //     duringWeatherId: 0
-  //   },
-  //   validationSchema: object().shape({
-  //     priorWeatherId: number()
-  //       .required("Required")
-  //       .min(1, "Weather Required"),
-  //     duringWeatherId: number()
-  //       .required("Required")
-  //       .min(1, "Weather Required")
-  //   }),
-  //   onAction: onAfterFormValidateAndSubmit
-  // },
+  {
+    id: "weather",
+    stepTitle: "What was the weather like?",
+    component: Weather,
+    reviewComponent: WeatherReview,
+    initialValues: {
+      priorWeatherId: 0,
+      duringWeatherId: 0
+    },
+    validationSchema: object({
+      priorWeatherId: number().min(1, "Weather Required"),
+      duringWeatherId: number().min(1, "Weather Required")
+    }),
+    onAction: onAfterFormValidateAndSubmit
+  },
 
   {
     id: "stepsStairs",
@@ -107,14 +101,14 @@ export default [
     component: Zone,
     reviewComponent: ZoneReview,
     initialValues: {
-      sand: "",
-      gravel: "",
-      iceMelt: ""
+      sand: 0,
+      gravel: 0,
+      iceMelt: 0
     },
-    validationSchema: object().shape({
-      sand: string().required("Please select an option"),
-      gravel: string().required("Please select an option"),
-      iceMelt: string().required("Please select an option")
+    validationSchema: object({
+      sand: number().min(1, "Please select an option"),
+      gravel: number().min(1, "Please select an option"),
+      iceMelt: number().min(1, "Please select an option")
     }),
     onAction: onAfterFormValidateAndSubmit
   },
@@ -125,14 +119,14 @@ export default [
     component: Zone,
     reviewComponent: ZoneReview,
     initialValues: {
-      sand: "",
-      gravel: "",
-      iceMelt: ""
+      sand: 0,
+      gravel: 0,
+      iceMelt: 0
     },
-    validationSchema: object().shape({
-      sand: string().required("Please select an option"),
-      gravel: string().required("Please select an option"),
-      iceMelt: string().required("Please select an option")
+    validationSchema: object({
+      sand: number().min(1, "Please select an option"),
+      gravel: number().min(1, "Please select an option"),
+      iceMelt: number().min(1, "Please select an option")
     }),
     onAction: onAfterFormValidateAndSubmit
   },
@@ -143,32 +137,32 @@ export default [
     component: Zone,
     reviewComponent: ZoneReview,
     initialValues: {
-      sand: "",
-      gravel: "",
-      iceMelt: ""
+      sand: 0,
+      gravel: 0,
+      iceMelt: 0
     },
-    validationSchema: object().shape({
-      sand: string().required("Please select an option"),
-      gravel: string().required("Please select an option"),
-      iceMelt: string().required("Please select an option")
+    validationSchema: object({
+      sand: number().min(1, "Please select an option"),
+      gravel: number().min(1, "Please select an option"),
+      iceMelt: number().min(1, "Please select an option")
     }),
     onAction: onAfterFormValidateAndSubmit
   },
 
   {
-    id: "parkinglot",
+    id: "parkingLot",
     stepTitle: "What did you do for Parking Lot?",
     component: Zone,
     reviewComponent: ZoneReview,
     initialValues: {
-      sand: "",
-      gravel: "",
-      iceMelt: ""
+      sand: 0,
+      gravel: 0,
+      iceMelt: 0
     },
-    validationSchema: object().shape({
-      sand: string().required("Please select an option"),
-      gravel: string().required("Please select an option"),
-      iceMelt: string().required("Please select an option")
+    validationSchema: object({
+      sand: number().min(1, "Please select an option"),
+      gravel: number().min(1, "Please select an option"),
+      iceMelt: number().min(1, "Please select an option")
     }),
     onAction: onAfterFormValidateAndSubmit
   },

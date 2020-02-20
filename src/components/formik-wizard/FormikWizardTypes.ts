@@ -4,6 +4,17 @@ import { Schema } from "yup";
 
 export type FormikWizardBaseValues = any;
 
+export interface FormikWizardStepProps
+  extends FormikWizardContextValue<FormikWizardBaseValues, any> {
+  step: FormikWizardStepType;
+  Form?: any;
+  steps: string[];
+  FormWrapper: React.SFC<FormikWizardWrapperProps<any>>;
+  wizard: WizardContext;
+  formikProps?: Partial<FormikProps<any>>;
+  onSubmit: FormikWizardProps<any>["onSubmit"];
+}
+
 export interface FormikWizardContextValue<V = any, S = any> {
   status: S;
   setStatus: React.Dispatch<React.SetStateAction<S>>;

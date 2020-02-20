@@ -14,6 +14,7 @@ const LogEntryWizard = props => {
 
   return (
     <FormikWizard
+      formikProps={{}}
       steps={wizardSteps}
       onSubmit={handleSubmit}
       render={LogEntryWizardLayout}
