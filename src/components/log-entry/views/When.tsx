@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { useFormikContext } from "formik";
 import Grid from "@material-ui/core/Grid";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -7,10 +7,12 @@ import DateTimePickerField from "../../pickers/DateTimePickerField";
 
 const DateTimeFormat = "dd/MM/yyyy hh:mm a";
 
-const FormBody = props => {
+const FormBody = () => {
   const { initialValues } = useFormikContext();
 
-  const [endDateMin, setEndDateMin] = useState(initialValues.startDateTime);
+  const [endDateMin, setEndDateMin] = React.useState(
+    initialValues.startDateTime
+  );
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>

@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import { useFormikContext } from "formik";
 import Grid from "@material-ui/core/Grid";
 import OneOfPicker from "../../pickers/OneOfPicker";
 import api from "../../../api/log-api";
 
-const FormBody = props => {
-  console.log("form props", props);
+const FormBody = () => {
   const { values } = useFormikContext();
-  const [actionsWithChoicesData, setActionsWithChoicesData] = useState();
+  const [actionsWithChoicesData, setActionsWithChoicesData] = React.useState();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       const actionsWithChoices = await api.fetchActionsAndChoices();
       setActionsWithChoicesData(actionsWithChoices);
@@ -21,7 +20,7 @@ const FormBody = props => {
   return (
     <React.Fragment>
       {actionsWithChoicesData &&
-        actionsWithChoicesData.map((action, index) => (
+        actionsWithChoicesData.map((action: any, index: number) => (
           <Grid key={`${index}_${action.id}`} container spacing={4}>
             <Grid item xs>
               <OneOfPicker

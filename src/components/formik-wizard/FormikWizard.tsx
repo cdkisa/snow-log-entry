@@ -20,7 +20,6 @@ const FormikWizardContext = React.createContext<FormikWizardContextValue | null>
 );
 
 export function FormikWizard<T>({
-  formikProps,
   albusProps,
   onSubmit,
   steps,
@@ -55,7 +54,6 @@ export function FormikWizard<T>({
               render={wizard => (
                 <FormikWizardStep
                   wizard={wizard}
-                  formikProps={formikProps}
                   onSubmit={onSubmit}
                   steps={stepIds}
                   status={status}

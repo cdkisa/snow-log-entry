@@ -1,19 +1,8 @@
-import { FormikProps, FormikErrors } from "formik";
+import { FormikProps, FormikErrors, FormikConfig } from "formik";
 import { WizardContext, WizardProps } from "react-albus";
 import { Schema } from "yup";
 
 export type FormikWizardBaseValues = any;
-
-export interface FormikWizardStepProps
-  extends FormikWizardContextValue<FormikWizardBaseValues, any> {
-  step: FormikWizardStepType;
-  Form?: any;
-  steps: string[];
-  FormWrapper: React.SFC<FormikWizardWrapperProps<any>>;
-  wizard: WizardContext;
-  formikProps?: Partial<FormikProps<any>>;
-  onSubmit: FormikWizardProps<any>["onSubmit"];
-}
 
 export interface FormikWizardContextValue<V = any, S = any> {
   status: S;
@@ -24,17 +13,34 @@ export interface FormikWizardContextValue<V = any, S = any> {
 
 export interface FormikWizardStepType {
   id: string;
-  component: React.SFC<{}>;
+  component: React.FunctionComponent<{}>;
+  stepTitle?: string;
+  reviewComponent?: React.FunctionComponent<FormikWizardStepReviewProps>;
   validationSchema?: Schema<any>;
   validate?: (values: any) => void | object | Promise<FormikErrors<any>>;
   initialValues?: FormikWizardBaseValues;
-  actionLabel?: string;
   onAction?: (
     sectionValues: FormikWizardBaseValues,
     formValues: FormikWizardBaseValues
   ) => Promise<any>;
   keepValuesOnPrevious?: boolean;
-  meta?: any;
+  formikProps?: Partial<FormikConfig<any>>;
+}
+
+export interface FormikWizardStepReviewProps {
+  id: string;
+  stepTitle?: string;
+  values: FormikWizardBaseValues;
+}
+
+export interface FormikWizardStepProps
+  extends FormikWizardContextValue<FormikWizardBaseValues, any> {
+  step: FormikWizardStepType;
+  Form?: any;
+  steps: string[];
+  FormWrapper: React.FunctionComponent<FormikWizardWrapperProps<any>>;
+  wizard: WizardContext;
+  onSubmit: FormikWizardProps<any>["onSubmit"];
 }
 
 export interface FormikWizardWrapperProps<Values, Status = any>
@@ -52,9 +58,8 @@ export interface FormikWizardWrapperProps<Values, Status = any>
 
 export interface FormikWizardProps<Values, Status = any> {
   steps: FormikWizardStepType[];
-  render: React.SFC<FormikWizardWrapperProps<Values, Status>>;
+  render: React.FunctionComponent<FormikWizardWrapperProps<Values, Status>>;
   onSubmit: (values: Values) => void | Promise<any>;
-  formikProps?: Partial<FormikProps<Values>>;
   albusProps?: Partial<WizardProps>;
   Form?: any;
 }

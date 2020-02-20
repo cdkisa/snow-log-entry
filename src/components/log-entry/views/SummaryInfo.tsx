@@ -1,17 +1,14 @@
-import React from "react";
+import * as React from "react";
+import { useFormikContext } from "formik";
 import { useFormikWizard } from "../../formik-wizard/FormikWizard";
 import wizardSteps from "../steps";
 
-const getWizardStepDefinition = id => wizardSteps.find(x => x.id === id);
+const getWizardStepDefinition = (id: string) =>
+  wizardSteps.find(x => x.id === id);
 
 const mergeContextWithDefinition = ({ values }) => {
-  const stepInfoList = [];
-  for (const stepId in values) {
-    const stepDefinition = getWizardStepDefinition(stepId);
-    const stepValues = values[stepId];
-    stepInfoList.push({ ...{ values: stepValues }, ...stepDefinition });
-  }
-  return stepInfoList;
+  Object.keys(values).forEach(key => console.log("VALUES", values[key]));
+  return [];
 };
 
 const renderReviewComponents = stepInfoList =>
@@ -25,11 +22,16 @@ const renderReviewComponents = stepInfoList =>
     );
 
 const SummaryInfo = () => {
+  const formikContext = useFormikContext();
+  console.log("FORMIK CONTEXT", formikContext);
   const formWizardContext = useFormikWizard();
   console.log("SUMMARY CONTEXT", formWizardContext);
-  const stepInfoList = mergeContextWithDefinition(formWizardContext);
-  const reviewComponents = renderReviewComponents(stepInfoList);
-  return <React.Fragment>{/* {reviewComponents} */}</React.Fragment>;
+
+  return (
+    <React.Fragment>
+      {mergeContextWithDefinition(formWizardContext)}
+    </React.Fragment>
+  );
 };
 
 export default SummaryInfo;

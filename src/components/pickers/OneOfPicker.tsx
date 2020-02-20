@@ -1,19 +1,38 @@
-import React from "react";
+import * as React from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
 import { useField } from "formik";
+import { PropTypes } from "@material-ui/core";
 
-const OneOfPicker = ({ title, items, name }) => {
+interface Props {
+  title: string;
+  items: any[];
+  name: string;
+  value?: any;
+}
+
+enum Variant {
+  Text = "text",
+  Contained = "contained",
+  Outlined = "outlined"
+}
+
+interface Selected {
+  variant: Variant;
+  color: PropTypes.Color;
+}
+
+const OneOfPicker = ({ title, items, name }: Props) => {
   const [field, meta, helpers] = useField(name);
   const { value, error } = meta;
   const { setValue } = helpers;
 
-  const isSelected = v =>
+  const isSelected = (v: number): Selected =>
     v === value
-      ? { variant: "contained", color: "primary" }
-      : { variant: "outlined", color: "default" };
+      ? { variant: Variant.Contained, color: "primary" }
+      : { variant: Variant.Outlined, color: "default" };
 
   const isError = Boolean(error);
 

@@ -1,10 +1,11 @@
-import React from "react";
+import * as React from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { FormikWizardWrapperProps } from "../formik-wizard/FormikWizardTypes";
 
 const LogEntryWizardLayout = ({
   children,
@@ -14,9 +15,8 @@ const LogEntryWizardLayout = ({
   goToPreviousStep,
   canGoBack,
   currentStep,
-  step,
-  ...props
-}) => {
+  step
+}: FormikWizardWrapperProps<any>) => {
   return (
     <Card>
       {status && (
@@ -25,7 +25,7 @@ const LogEntryWizardLayout = ({
           <hr />
         </div>
       )}
-      <CardHeader title={step.stepTitle || ""} />
+      {step.stepTitle && <CardHeader title={step.stepTitle} />}
       <CardContent>{children}</CardContent>
       <CardActions disableSpacing>
         <Grid container spacing={1} justify="flex-end">

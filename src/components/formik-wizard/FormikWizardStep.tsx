@@ -9,7 +9,6 @@ const FormikWizardStep = ({
   FormWrapper,
   steps,
   wizard,
-  formikProps,
   onSubmit,
   setStatus,
   status,
@@ -42,8 +41,6 @@ const FormikWizardStep = ({
             ? await step.onAction(sectionValues, values)
             : undefined;
 
-          console.log(`section values`, sectionValues);
-
           setValues((values: any) => {
             return produce(values, (draft: any) => {
               draft[info.currentStep] = sectionValues;
@@ -70,13 +67,20 @@ const FormikWizardStep = ({
     ]
   );
 
+  const {
+    initialValues,
+    validationSchema,
+    validate,
+    ...otherFormikProps
+  } = step.formikProps;
+
   return (
     <Formik
-      {...formikProps}
+      {...otherFormikProps}
       enableReinitialize
-      initialValues={step.initialValues}
-      validationSchema={step.validationSchema}
-      validate={step.validate}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      validate={validate}
       onSubmit={handleSubmit}
     >
       {props => (

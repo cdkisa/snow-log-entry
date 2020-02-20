@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import { useFormikContext } from "formik";
 import Grid from "@material-ui/core/Grid";
 import OneOfPicker from "../../pickers/OneOfPicker";
@@ -7,9 +7,9 @@ import api from "../../../api/log-api";
 
 const FormBody = () => {
   const { values } = useFormikContext();
-  const [weatherData, setWeatherData] = useState();
+  const [weatherData, setWeatherData] = React.useState();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       const result = await api.fetchWeathers();
       setWeatherData(result);

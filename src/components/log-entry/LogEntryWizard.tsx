@@ -1,25 +1,22 @@
-import React, { useCallback } from "react";
+import * as React from "react";
 import { FormikWizard } from "../formik-wizard/FormikWizard";
 import wizardSteps from "./steps";
 import LogEntryWizardLayout from "./LogEntryWizardLayout";
 
-const LogEntryWizard = props => {
-  const handleSubmit = useCallback(values => {
+export default () => {
+  const handleSubmit = async (values: any) => {
     console.log("full values:", values);
 
     return {
       message: "Thanks for submitting!"
     };
-  }, []);
+  };
 
   return (
     <FormikWizard
-      formikProps={{}}
       steps={wizardSteps}
       onSubmit={handleSubmit}
       render={LogEntryWizardLayout}
     />
   );
 };
-
-export default LogEntryWizard;
