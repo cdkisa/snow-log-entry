@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form as DefaultForm, Formik } from "formik";
 import produce from "immer";
-import { FormikWizardStepProps } from "./FormikWizardTypes";
+import { IFormikWizardStepProps } from "./FormikWizardTypes";
 
 const FormikWizardStep = ({
   step,
@@ -14,7 +14,7 @@ const FormikWizardStep = ({
   status,
   values,
   setValues
-}: FormikWizardStepProps) => {
+}: IFormikWizardStepProps) => {
   const info = React.useMemo(() => {
     return {
       canGoBack: steps[0] !== step.id,
@@ -67,21 +67,14 @@ const FormikWizardStep = ({
     ]
   );
 
-  const {
-    initialValues,
-    validationSchema,
-    validate,
-    ...otherFormikProps
-  } = step.formikProps;
-
   return (
     <Formik
-      {...otherFormikProps}
+      initialValues={step.formikProps && step.formikProps.initialValues}
+      validationSchema={step.formikProps && step.formikProps.validationSchema}
+      validate={step.formikProps && step.formikProps.validate}
       enableReinitialize
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      validate={validate}
       onSubmit={handleSubmit}
+      {...step.formikProps}
     >
       {props => (
         <Form onSubmit={props.handleSubmit}>

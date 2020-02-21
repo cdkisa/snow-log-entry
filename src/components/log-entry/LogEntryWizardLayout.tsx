@@ -5,7 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { FormikWizardWrapperProps } from "../formik-wizard/FormikWizardTypes";
+import { IFormikWizardWrapperProps } from "../formik-wizard/FormikWizardTypes";
 
 const LogEntryWizardLayout = ({
   children,
@@ -16,7 +16,7 @@ const LogEntryWizardLayout = ({
   canGoBack,
   currentStep,
   step
-}: FormikWizardWrapperProps<any>) => {
+}: IFormikWizardWrapperProps<any>) => {
   return (
     <Card>
       {status && (

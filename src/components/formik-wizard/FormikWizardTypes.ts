@@ -1,50 +1,58 @@
-import { FormikProps, FormikErrors, FormikConfig } from "formik";
+import { FormikErrors, FormikConfig } from "formik";
 import { WizardContext, WizardProps } from "react-albus";
 import { Schema } from "yup";
 
-export type FormikWizardBaseValues = any;
+export type TFormikWizardBaseValues = any;
 
-export interface FormikWizardContextValue<V = any, S = any> {
+export interface IFormikWizardContextValue<V = any, S = any> {
   status: S;
   setStatus: React.Dispatch<React.SetStateAction<S>>;
   values: V;
   setValues: React.Dispatch<React.SetStateAction<V>>;
 }
 
-export interface FormikWizardStepType {
+export type TValidate = (
+  values: any
+) => void | object | Promise<FormikErrors<any>>;
+
+export type TOnAction = (
+  sectionValues: TFormikWizardBaseValues,
+  formValues: TFormikWizardBaseValues
+) => Promise<any>;
+
+export interface IFormikConfigProps {
+  initialValues: any;
+  validationSchema: Schema<any>;
+}
+
+export interface IFormikWizardStep {
   id: string;
-  component: React.FunctionComponent<{}>;
+  component: React.FC<{}>;
   stepTitle?: string;
-  reviewComponent?: React.FunctionComponent<FormikWizardStepReviewProps>;
-  validationSchema?: Schema<any>;
-  validate?: (values: any) => void | object | Promise<FormikErrors<any>>;
-  initialValues?: FormikWizardBaseValues;
-  onAction?: (
-    sectionValues: FormikWizardBaseValues,
-    formValues: FormikWizardBaseValues
-  ) => Promise<any>;
+  reviewComponent?: React.FC<IFormikWizardStepReviewProps>;
+  onAction?: TOnAction;
   keepValuesOnPrevious?: boolean;
   formikProps?: Partial<FormikConfig<any>>;
 }
 
-export interface FormikWizardStepReviewProps {
+export interface IFormikWizardStepReviewProps {
   id: string;
   stepTitle?: string;
-  values: FormikWizardBaseValues;
+  values: TFormikWizardBaseValues;
 }
 
-export interface FormikWizardStepProps
-  extends FormikWizardContextValue<FormikWizardBaseValues, any> {
-  step: FormikWizardStepType;
+export interface IFormikWizardStepProps
+  extends IFormikWizardContextValue<TFormikWizardBaseValues, any> {
+  step: IFormikWizardStep;
   Form?: any;
   steps: string[];
-  FormWrapper: React.FunctionComponent<FormikWizardWrapperProps<any>>;
+  FormWrapper: React.FC<IFormikWizardWrapperProps<any>>;
   wizard: WizardContext;
-  onSubmit: FormikWizardProps<any>["onSubmit"];
+  onSubmit: IFormikWizardProps<any>["onSubmit"];
 }
 
-export interface FormikWizardWrapperProps<Values, Status = any>
-  extends FormikWizardContextValue<Values, Status> {
+export interface IFormikWizardWrapperProps<Values, Status = any>
+  extends IFormikWizardContextValue<Values, Status> {
   canGoBack: boolean;
   goToPreviousStep: () => void;
   currentStep: string;
@@ -53,13 +61,15 @@ export interface FormikWizardWrapperProps<Values, Status = any>
   wizard: WizardContext;
   children: React.ReactNode;
   isSubmitting: boolean;
-  step: FormikWizardStepType;
+  step: IFormikWizardStep;
 }
 
-export interface FormikWizardProps<Values, Status = any> {
-  steps: FormikWizardStepType[];
-  render: React.FunctionComponent<FormikWizardWrapperProps<Values, Status>>;
-  onSubmit: (values: Values) => void | Promise<any>;
+export type TOnSubmit = (values: any) => void | Promise<any>;
+
+export interface IFormikWizardProps<Values, Status = any> {
+  steps: IFormikWizardStep[];
+  render: React.FC<IFormikWizardWrapperProps<Values, Status>>;
+  onSubmit: TOnSubmit;
   albusProps?: Partial<WizardProps>;
   Form?: any;
 }

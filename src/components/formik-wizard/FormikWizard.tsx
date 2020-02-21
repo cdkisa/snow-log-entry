@@ -1,21 +1,21 @@
 import * as React from "react";
 import * as Albus from "react-albus";
 import {
-  FormikWizardBaseValues,
-  FormikWizardContextValue,
-  FormikWizardProps,
-  FormikWizardStepType
+  TFormikWizardBaseValues,
+  IFormikWizardContextValue,
+  IFormikWizardProps,
+  IFormikWizardStep
 } from "./FormikWizardTypes";
 import FormikWizardStep from "./FormikWizardStep";
 
-function getInitialValues(steps: FormikWizardStepType[]) {
-  return steps.reduce<FormikWizardBaseValues>((curr, next) => {
+function getInitialValues(steps: IFormikWizardStep[]) {
+  return steps.reduce<TFormikWizardBaseValues>((curr, next) => {
     curr[next.id] = next.initialValues;
     return curr;
   }, {});
 }
 
-const FormikWizardContext = React.createContext<FormikWizardContextValue | null>(
+const FormikWizardContext = React.createContext<IFormikWizardContextValue | null>(
   null
 );
 
@@ -25,7 +25,7 @@ export function FormikWizard<T>({
   steps,
   Form,
   render
-}: FormikWizardProps<T>) {
+}: IFormikWizardProps<T>) {
   const [status, setStatus] = React.useState(undefined);
   const [values, setValues] = React.useState(() => getInitialValues(steps));
 
@@ -79,5 +79,5 @@ export function FormikWizard<T>({
 export default FormikWizard;
 
 export function useFormikWizard<T>() {
-  return React.useContext(FormikWizardContext) as FormikWizardContextValue<T>;
+  return React.useContext(FormikWizardContext) as IFormikWizardContextValue<T>;
 }

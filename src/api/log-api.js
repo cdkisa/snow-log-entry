@@ -72,6 +72,12 @@ const weatherData = [
 ];
 
 class LogApi {
+  fetchZonesActionsChoices = async () => ({
+    zonesData,
+    actionsData,
+    choicesData
+  });
+
   fetchZones = async () => {
     return zonesData.map(area => ({
       ...area,
@@ -89,8 +95,8 @@ class LogApi {
     }));
   };
 
-  fetchAreas = async () => zonesData;
-  fetchArea = async id => zonesData.find(x => x.id === id);
+  fetchZones = async () => zonesData;
+  fetchZone = async id => zonesData.find(x => x.id === id);
 
   fetchActions = async () => actionsData;
   fetchAction = async id => actionsData.find(x => x.id === id);

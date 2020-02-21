@@ -1,17 +1,18 @@
-import { FormikWizardStepType } from "../formik-wizard/FormikWizardTypes";
-import { object, date, number, TestOptions } from "yup";
+import { IFormikWizardStep } from "../formik-wizard/FormikWizardTypes";
+import { object, date, number, TestOptions, Schema, DateSchema } from "yup";
 import { isDate, differenceInMinutes } from "date-fns";
-import Where from "./views/Where";
-import WhereReview from "./views/WhereReview";
-import When from "./views/When";
-import WhenReview from "./views/WhenReview";
-import Weather from "./views/Weather";
-import WeatherReview from "./views/WeatherReview";
-import Zone from "./views/Zone";
-import ZoneReview from "./views/ZoneReview";
-import SummaryInfo from "./views/SummaryInfo";
+import Where from "./forms/Where";
+import When from "./forms/When";
+import Weather from "./forms/Weather";
+import Zone from "./forms/Zone";
+import WhereReview from "./reviews/WhereReview";
+import WhenReview from "./reviews/WhenReview";
+import WeatherReview from "./reviews/WeatherReview";
+import ZoneReview from "./reviews/ZoneReview";
 
-const nullableDateSchema = (label: string) =>
+import SummaryInfo from "./forms/SummaryInfo";
+
+const nullableDateSchema = (label: string): DateSchema<Date | null> =>
   date()
     .label(label)
     .nullable()
@@ -31,7 +32,7 @@ const onAfterFormValidateAndSubmit = async (
   console.log("form values:", formValues);
 };
 
-const stepDefinitions: FormikWizardStepType[] = [
+const stepDefinitions: IFormikWizardStep[] = [
   {
     id: "where",
     stepTitle: "Where did you work?",
@@ -64,7 +65,7 @@ const stepDefinitions: FormikWizardStepType[] = [
         ),
         endDateTime: nullableDateSchema("End Date/Time")
           .test(isIncrementOfFiveTest)
-          .when("startDateTime", (startDateTime, schema) => {
+          .when("startDateTime", (startDateTime: Date, schema: Schema<any>) => {
             if (isDate(startDateTime)) {
               const MinDifferenceInMinutes = 5;
 
@@ -77,11 +78,12 @@ const stepDefinitions: FormikWizardStepType[] = [
                 },
                 message:
                   "${path} must at least ${MinDifferenceInMinutes} minutes after ${startDateLabel}",
-                test: endDateTime =>
+                test: (endDateTime: Date) =>
                   differenceInMinutes(endDateTime, startDateTime) >=
                   MinDifferenceInMinutes
               });
             }
+            return schema;
           })
       })
     },
@@ -126,65 +128,65 @@ const stepDefinitions: FormikWizardStepType[] = [
     onAction: onAfterFormValidateAndSubmit
   },
 
-  {
-    id: "sidewalks",
-    stepTitle: "What did you do for Sidewalks?",
-    component: Zone,
-    reviewComponent: ZoneReview,
-    formikProps: {
-      initialValues: {
-        sand: 0,
-        gravel: 0,
-        iceMelt: 0
-      },
-      validationSchema: object({
-        sand: number().min(1, "Please select an option"),
-        gravel: number().min(1, "Please select an option"),
-        iceMelt: number().min(1, "Please select an option")
-      })
-    },
-    onAction: onAfterFormValidateAndSubmit
-  },
+  // {
+  //   id: "sidewalks",
+  //   stepTitle: "What did you do for Sidewalks?",
+  //   component: Zone,
+  //   reviewComponent: ZoneReview,
+  //   formikProps: {
+  //     initialValues: {
+  //       sand: 0,
+  //       gravel: 0,
+  //       iceMelt: 0
+  //     },
+  //     validationSchema: object({
+  //       sand: number().min(1, "Please select an option"),
+  //       gravel: number().min(1, "Please select an option"),
+  //       iceMelt: number().min(1, "Please select an option")
+  //     })
+  //   },
+  //   onAction: onAfterFormValidateAndSubmit
+  // },
 
-  {
-    id: "entrance",
-    stepTitle: "What did you do for Entrance?",
-    component: Zone,
-    reviewComponent: ZoneReview,
-    onAction: onAfterFormValidateAndSubmit,
-    formikProps: {
-      initialValues: {
-        sand: 0,
-        gravel: 0,
-        iceMelt: 0
-      },
-      validationSchema: object({
-        sand: number().min(1, "Please select an option"),
-        gravel: number().min(1, "Please select an option"),
-        iceMelt: number().min(1, "Please select an option")
-      })
-    }
-  },
+  // {
+  //   id: "entrance",
+  //   stepTitle: "What did you do for Entrance?",
+  //   component: Zone,
+  //   reviewComponent: ZoneReview,
+  //   onAction: onAfterFormValidateAndSubmit,
+  //   formikProps: {
+  //     initialValues: {
+  //       sand: 0,
+  //       gravel: 0,
+  //       iceMelt: 0
+  //     },
+  //     validationSchema: object({
+  //       sand: number().min(1, "Please select an option"),
+  //       gravel: number().min(1, "Please select an option"),
+  //       iceMelt: number().min(1, "Please select an option")
+  //     })
+  //   }
+  // },
 
-  {
-    id: "parkingLot",
-    stepTitle: "What did you do for Parking Lot?",
-    component: Zone,
-    reviewComponent: ZoneReview,
-    onAction: onAfterFormValidateAndSubmit,
-    formikProps: {
-      initialValues: {
-        sand: 0,
-        gravel: 0,
-        iceMelt: 0
-      },
-      validationSchema: object({
-        sand: number().min(1, "Please select an option"),
-        gravel: number().min(1, "Please select an option"),
-        iceMelt: number().min(1, "Please select an option")
-      })
-    }
-  },
+  // {
+  //   id: "parkingLot",
+  //   stepTitle: "What did you do for Parking Lot?",
+  //   component: Zone,
+  //   reviewComponent: ZoneReview,
+  //   onAction: onAfterFormValidateAndSubmit,
+  //   formikProps: {
+  //     initialValues: {
+  //       sand: 0,
+  //       gravel: 0,
+  //       iceMelt: 0
+  //     },
+  //     validationSchema: object({
+  //       sand: number().min(1, "Please select an option"),
+  //       gravel: number().min(1, "Please select an option"),
+  //       iceMelt: number().min(1, "Please select an option")
+  //     })
+  //   }
+  // },
 
   {
     id: "summary",
