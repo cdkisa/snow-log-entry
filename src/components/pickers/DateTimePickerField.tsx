@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useField } from "formik";
-import { DateTimePicker, DateTimePickerProps } from "@material-ui/pickers";
+import { DateTimePicker } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
 interface Props {

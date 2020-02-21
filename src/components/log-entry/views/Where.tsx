@@ -7,7 +7,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
-import { Select } from "formik-material-ui";
+import Select from "@material-ui/core/Select";
 import api from "../../../api/properties-api";
 
 const PropertyOptions = (properties: any[]) => {
@@ -26,7 +26,7 @@ const PropertyOptions = (properties: any[]) => {
 };
 
 const FormBody = () => {
-  const { errors, values } = useFormikContext();
+  const { errors, values, setFieldValue } = useFormikContext();
   const [properties, setProperties] = React.useState();
 
   React.useEffect(() => {
@@ -47,6 +47,7 @@ const FormBody = () => {
             name="buildingId"
             value={values.buildingId}
             input={<Input id="buildingId" />}
+            onChange={e => setFieldValue("buildingId", e.target.value)}
           >
             {properties && PropertyOptions(properties)}
           </Select>
