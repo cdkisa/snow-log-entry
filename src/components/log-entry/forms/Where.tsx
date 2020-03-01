@@ -9,6 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
 import api from "../../../api/properties-api";
+import appState from "../../../api/app-api";
 
 const PropertyOptions = (properties: any[]) => {
   const result: any[] = [];
@@ -38,6 +39,11 @@ const FormBody = () => {
     fetchData();
   }, []);
 
+  const setBuilding = (id: any) => {
+    setFieldValue("buildingId", id);
+    appState.buildingId = id;
+  };
+
   return (
     <Grid container>
       <Grid item xs>
@@ -47,7 +53,7 @@ const FormBody = () => {
             name="buildingId"
             value={values.buildingId}
             input={<Input id="buildingId" />}
-            onChange={e => setFieldValue("buildingId", e.target.value)}
+            onChange={e => setBuilding(e.target.value)}
           >
             {properties && PropertyOptions(properties)}
           </Select>

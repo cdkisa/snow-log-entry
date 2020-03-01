@@ -27,7 +27,7 @@ export interface IFormikConfigProps {
 
 export interface IFormikWizardStep {
   id: string;
-  component: React.FC<{}>;
+  component: React.FC<IFormikWizardStepProps>;
   stepTitle?: string;
   reviewComponent?: React.FC<IFormikWizardStepReviewProps>;
   onAction?: TOnAction;
@@ -55,6 +55,7 @@ export interface IFormikWizardWrapperProps<Values, Status = any>
   extends IFormikWizardContextValue<Values, Status> {
   canGoBack: boolean;
   goToPreviousStep: () => void;
+  goToStepId: (getStepId: () => void) => void;
   currentStep: string;
   isLastStep: boolean;
   steps: string[];

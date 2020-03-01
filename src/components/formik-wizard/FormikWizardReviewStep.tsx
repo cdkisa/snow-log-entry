@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form as DefaultForm, Formik, useFormikContext } from "formik";
+import { Form as DefaultForm, Formik } from "formik";
 import produce from "immer";
 import { IFormikWizardStepProps } from "./FormikWizardTypes";
 
@@ -12,9 +12,8 @@ const FormikWizardStep = ({
   onSubmit,
   setStatus,
   status,
-  values,
-  setValues
-}: IFormikWizardStepProps) => {
+  values
+}: any) => {
   const info = React.useMemo(() => {
     return {
       canGoBack: steps[0] !== step.id,
@@ -31,10 +30,11 @@ const FormikWizardStep = ({
 
       try {
         if (info.isLastStep) {
+          console.log("LAST STEP", values);
           const newValues = produce(values, (draft: any) => {
             draft[info.currentStep] = sectionValues;
           });
-
+          console.log("LAST STEP X", newValues);
           status = await onSubmit(newValues);
           setValues(newValues);
         } else {
@@ -68,8 +68,6 @@ const FormikWizardStep = ({
     ]
   );
 
-  const fc = useFormikContext();
-
   return (
     <Formik
       initialValues={step.formikProps && step.formikProps.initialValues}
@@ -100,26 +98,12 @@ const FormikWizardStep = ({
 
               wizard.previous();
             }}
-            goToStepId={(getStepId: Function) => {
-              const stepId = getStepId();
-              console.log("fc", fc);
-              setStatus(undefined);
-              if (step.keepValuesOnPrevious) {
-                setValues((values: any) => {
-                  return produce(values, (draft: any) => {
-                    draft[step.id] = values;
-                  });
-                });
-              }
-
-              wizard.push(stepId);
-            }}
             status={status}
             values={values}
             setStatus={status}
             setValues={setValues}
           >
-            {React.createElement(step.component, { wizard: wizard })}
+            {React.createElement(step.component)}
           </FormWrapper>
         </Form>
       )}

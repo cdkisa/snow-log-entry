@@ -4,15 +4,20 @@ import Grid from "@material-ui/core/Grid";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import DateTimePickerField from "../../pickers/DateTimePickerField";
+import appState from "../../../api/app-api";
 
 const DateTimeFormat = "dd/MM/yyyy hh:mm a";
 
 const FormBody = () => {
   const { initialValues } = useFormikContext();
-
   const [endDateMin, setEndDateMin] = React.useState(
     initialValues.startDateTime
   );
+
+  const setStartDateTime = (value: any) => {
+    setEndDateMin(value);
+    appState.startDateTime = value;
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -24,7 +29,10 @@ const FormBody = () => {
             fullWidth
             format={DateTimeFormat}
             minutesStep={5}
-            onAfterChange={x => setEndDateMin(x)}
+            onAfterChange={x => setStartDateTime(x)}
+            disableFuture
+            showTodayButton
+            maxDate={new Date()}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -34,7 +42,9 @@ const FormBody = () => {
             format={DateTimeFormat}
             fullWidth
             minDate={endDateMin}
+            disableFuture
             minutesStep={5}
+            maxDate={new Date()}
           />
         </Grid>
       </Grid>

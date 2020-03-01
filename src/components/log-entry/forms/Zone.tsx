@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useFormikContext } from "formik";
 import Grid from "@material-ui/core/Grid";
-import OneOfPicker from "../../pickers/OneOfPicker";
+import OneOfPickerRadio from "../../pickers/OneOfPickerRadio";
 import api from "../../../api/log-api";
 
 const FormBody = () => {
@@ -23,8 +23,8 @@ const FormBody = () => {
         actionsWithChoicesData.map((action: any, index: number) => (
           <Grid key={`${index}_${action.id}`} container spacing={4}>
             <Grid item xs>
-              <OneOfPicker
-                title={`I applied ${action.label}`}
+              <OneOfPickerRadio
+                title={`${action.label}`}
                 name={action.name}
                 items={action.choices || []}
                 value={values[action.name]}

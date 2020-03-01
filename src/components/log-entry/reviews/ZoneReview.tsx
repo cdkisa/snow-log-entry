@@ -3,17 +3,23 @@ import { IFormikWizardStepReviewProps } from "../../formik-wizard/FormikWizardTy
 import logApi from "../../../api/log-api";
 import uuid from "../../../utils/uuid";
 
-const renderChildren = (values: any, data: any) => {
+const ActionLabelMap = {
+  sand: "Sand",
+  gravel: "Gravel",
+  iceMelt: "Ice Melt"
+};
+
+const ChoiceLabelMap = ["?", "Yes", "No"];
+
+const renderChildren = (values: any) => {
   const childComponents = [];
 
   for (const key in values) {
     const value = values[key] as number;
-    const action = data.actionsData.find(x => x.name === key);
-    const choice = data.choicesData.find(x => x.id === value);
+    const action = ActionLabelMap[key];
+    const choice = ChoiceLabelMap[value];
 
-    const childComponent = (
-      <div key={uuid()}>{`I applied ${action.label} = ${choice.label}`}</div>
-    );
+    const childComponent = <div key={uuid()}>{`${action} = ${choice}`}</div>;
 
     if (childComponents.length > 0) childComponents.push(<hr key={uuid()} />);
     childComponents.push(childComponent);
@@ -33,5 +39,7 @@ export default (props: IFormikWizardStepReviewProps) => {
     fetchData();
   }, []);
 
-  return <div key={uuid()}>{data && renderChildren(props.values, data)}</div>;
+  console.log("values", props.values);
+
+  return <div>{data && renderChildren(props.values)}</div>;
 };

@@ -10,7 +10,7 @@ import FormikWizardStep from "./FormikWizardStep";
 
 function getInitialValues(steps: IFormikWizardStep[]) {
   return steps.reduce<TFormikWizardBaseValues>((curr, next) => {
-    curr[next.id] = next.initialValues;
+    curr[next.id] = next.formikProps && next.formikProps.initialValues;
     return curr;
   }, {});
 }
@@ -62,7 +62,7 @@ export function FormikWizard<T>({
                   setStatus={setStatus}
                   step={{
                     ...step,
-                    initialValues: values[step.id] || {}
+                    initialValues: values[step.id] | {}
                   }}
                   Form={Form}
                   FormWrapper={render}
