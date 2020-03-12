@@ -16,8 +16,8 @@ const SelectBuildingInitialValues = {
 
 export default () => {
   const dataApi = useApi(
-    api.fetchProjecsBuildingsByProject,
-    appState.projectId
+    api.fetchProjectBuildingsByProject,
+    parseInt(appState.projectId, 10)
   );
   const dataCache = React.useMemo(() => dataApi.response, [dataApi.response]);
 
@@ -39,12 +39,12 @@ export default () => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography color="primary" display="block" variant="h6">
-              {dataCache.name}
+              {dataCache.parent.name}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <OneOfPicker
-              items={dataCache.buildings}
+              items={dataCache.children}
               name="buildingId"
               value={formikProps.values.buildingId}
             />

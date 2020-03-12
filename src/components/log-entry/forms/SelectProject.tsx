@@ -33,7 +33,7 @@ export default () => {
     formik: FormikProps<any>
   ) => {
     const id = event.target.value;
-    const city = dataCache.find((x: any) => x.id === id);
+    const city = dataCache.find((x: any) => x.parent.id === id);
     setCity(city);
     formik.setFieldValue("projectId", SelectProjectInitialValues.projectId);
     formik.handleChange(event);
@@ -66,9 +66,9 @@ export default () => {
               }
               onChange={e => handleCityChange(e, formikProps)}
             >
-              {dataCache.map((city: any) => (
-                <MenuItem key={`c_${city.id}`} value={city.id}>
-                  {city.name}
+              {dataCache.map((item: any) => (
+                <MenuItem key={`c_${item.parent.id}`} value={item.parent.id}>
+                  {item.parent.name}
                 </MenuItem>
               ))}
             </TextField>
@@ -89,7 +89,7 @@ export default () => {
               onChange={formikProps.handleChange}
             >
               {city ? (
-                city.projects.map((project: any) => (
+                city.children.map((project: any) => (
                   <MenuItem key={`c_${project.id}`} value={project.id}>
                     {project.name}
                   </MenuItem>

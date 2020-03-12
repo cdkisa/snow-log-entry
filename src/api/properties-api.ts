@@ -1,261 +1,319 @@
-const countriesData = [
-  {
-    id: 1,
-    name: "Canada"
-  }
-];
+interface IKeyValue {
+  id: number;
+  parentId: number;
+  name: string;
+}
 
-const provincesData = [
+interface IKeyValueWithParent extends IKeyValue {
+  parentId: number;
+}
+
+interface IKeyValueHierarchy {
+  parent: IKeyValueWithParent;
+  children: IKeyValueWithParent[];
+}
+
+interface ILocation {
+  building: IKeyValueWithParent;
+  project: IKeyValueWithParent;
+  city: IKeyValueWithParent;
+  province: IKeyValueWithParent;
+}
+
+const provincesData: IKeyValueWithParent[] = [
   {
     id: 1,
-    countryId: 1,
+    parentId: 1,
     name: "Alberta"
   },
   {
     id: 2,
-    countryId: 1,
+    parentId: 1,
     name: "Saskatchewan"
   }
 ];
 
-const citiesData = [
+const citiesData: IKeyValueWithParent[] = [
   {
     id: 1,
-    provinceId: 1,
+    parentId: 1,
     name: "Calgary"
   },
   {
     id: 2,
-    provinceId: 1,
+    parentId: 1,
     name: "Edmonton"
   },
   {
     id: 3,
-    provinceId: 2,
+    parentId: 2,
     name: "Regina"
   }
 ];
 
-const projectsData = [
+const projectsData: IKeyValueWithParent[] = [
   {
     id: 100,
-    cityId: 1,
+    parentId: 1,
     name: "Calgary Place"
   },
   {
     id: 200,
-    cityId: 2,
+    parentId: 2,
     name: "Edmonton Place"
   },
   {
     id: 300,
-    cityId: 3,
+    parentId: 3,
     name: "Regina Place"
   }
 ];
 
-const buildingsData = [
+const buildingsData: IKeyValueWithParent[] = [
   {
     id: 100,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary A Block"
   },
   {
     id: 101,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary B Block"
   },
   {
     id: 102,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary C Block"
   },
   {
     id: 103,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary D Block"
   },
   {
     id: 104,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary E Block"
   },
   {
     id: 105,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary F Block"
   },
   {
     id: 106,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary G Block"
   },
   {
     id: 107,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary H Block"
   },
   {
     id: 108,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary I Block"
   },
   {
     id: 109,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary J Block"
   },
   {
     id: 110,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary K Block"
   },
   {
     id: 111,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary L Block"
   },
   {
     id: 112,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary M Block"
   },
   {
     id: 113,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary N Block"
   },
   {
     id: 115,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary O Block"
   },
   {
     id: 116,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary P Block"
   },
   {
     id: 117,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary Q Block"
   },
   {
     id: 118,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary R Block"
   },
   {
     id: 119,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary S Block"
   },
   {
     id: 120,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary T Block"
   },
   {
     id: 121,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary U Block"
   },
   {
     id: 122,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary V Block"
   },
   {
     id: 123,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary W Block"
   },
   {
     id: 124,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary X Block"
   },
   {
     id: 125,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary Y Block"
   },
   {
     id: 126,
-    projectId: 100,
+    parentId: 100,
     name: "Calgary Z Block"
   },
   {
     id: 3,
-    projectId: 200,
+    parentId: 200,
     name: "Edmonton A Block"
   },
   {
     id: 4,
-    projectId: 300,
+    parentId: 300,
     name: "Regina West"
   },
   {
     id: 5,
-    projectId: 300,
+    parentId: 300,
     name: "Regina East"
   }
 ];
 
 class PropertiesApi {
-  fetchCountries = async () => countriesData;
+  fetchProvinces = async (): Promise<IKeyValueWithParent[]> => provincesData;
 
-  fetchProvinces = async countryId =>
-    provincesData.filter(x => x.countryId === countryId);
+  fetchProvince = async (
+    id: number
+  ): Promise<IKeyValueWithParent | undefined> =>
+    provincesData.find((x: IKeyValueWithParent) => x.id === id);
 
-  fetchCities = async () => citiesData;
+  fetchCities = async (): Promise<IKeyValueWithParent[]> => citiesData;
 
-  fetchCitiesByProvince = async provinceId =>
-    citiesData.filter(x => x.provinceId === provinceId);
+  fetchCity = async (id: number): Promise<IKeyValueWithParent | undefined> =>
+    citiesData.find((x: IKeyValueWithParent) => x.id === id);
 
-  fetchProjectsByCity = async cityId =>
-    projectsData.filter(x => x.cityId === cityId);
+  fetchCitiesByProvince = async (
+    id: number
+  ): Promise<IKeyValueWithParent[] | undefined> =>
+    citiesData.filter(x => x.parentId === id);
 
-  fetchCityProjectHierarchy = async () =>
-    citiesData.map(p => ({
-      ...p,
-      projects: projectsData.filter(x => x.cityId === p.id)
+  fetchProjects = async (): Promise<IKeyValueWithParent[]> => projectsData;
+
+  fetchProject = async (id: number): Promise<IKeyValueWithParent | undefined> =>
+    projectsData.find((x: IKeyValueWithParent) => x.id === id);
+
+  fetchProjectsByCity = async (
+    id: number
+  ): Promise<IKeyValueWithParent[] | undefined> =>
+    projectsData.filter(x => x.parentId === id);
+
+  fetchBuildings = async (): Promise<IKeyValueWithParent[]> => buildingsData;
+
+  fetchBuilding = async (
+    id: number
+  ): Promise<IKeyValueWithParent | undefined> =>
+    buildingsData.find((x: IKeyValueWithParent) => x.id === id);
+
+  fetchBuildingsByProject = async (
+    id: number
+  ): Promise<IKeyValueWithParent[] | undefined> =>
+    buildingsData.filter(x => x.parentId === id);
+
+  fetchCityProjectHierarchy = async (): Promise<IKeyValueHierarchy[]> =>
+    citiesData.map((p: IKeyValueWithParent) => ({
+      parent: p,
+      children: projectsData.filter(x => x.parentId === p.id)
     }));
 
-  fetchProjectHierarchy = async () =>
-    projectsData.map(p => ({
-      ...p,
-      buildings: buildingsData.filter(x => x.projectId === p.id)
+  fetchProjectBuildingHierarchy = async (): Promise<IKeyValueHierarchy[]> =>
+    projectsData.map((p: IKeyValueWithParent) => ({
+      parent: p,
+      children: buildingsData.filter(x => x.parentId === p.id)
     }));
 
-  fetchProjecsBuildingsByProject = async id => {
-    const project = projectsData.find(p => p.id === parseInt(id, 10));
+  fetchProjectBuildingsByProject = async (
+    id: number
+  ): Promise<IKeyValueHierarchy> => {
+    const project = projectsData.find((p: IKeyValueWithParent) => p.id === id);
+
+    if (!project) throw Error(`Could not find project with id: ${id}`);
 
     return {
-      ...project,
-      buildings: buildingsData.filter(x => x.projectId === project.id)
+      parent: project,
+      children: buildingsData.filter(x => x.parentId === id)
     };
   };
 
-  fetchBuildings = async projectId =>
-    buildingsData.filter(x => x.projectId === projectId);
+  fetchLocation = async (buildingId: number): Promise<ILocation> => {
+    const building = buildingsData.find(x => x.id === buildingId);
 
-  fetchBuilding = async buildingId =>
-    buildingsData.filter(x => x.buildingId === buildingId);
+    if (!building)
+      throw Error(`Could not find building with id: ${buildingId}`);
 
-  fetchLocation = async buildingId => {
-    const building = buildingsData.find(x => x.id === parseInt(buildingId, 10));
-    const project = projectsData.find(x => x.id === building.projectId);
-    const city = citiesData.find(x => x.id === project.cityId);
-    const province = provincesData.find(x => x.id === city.provinceId);
-    const country = countriesData.find(x => x.id === province.countryId);
+    const project = projectsData.find(x => x.id === building.parentId);
+
+    if (!project)
+      throw Error(
+        `Could not find projects associated to building with id: ${buildingId}`
+      );
+
+    const city = citiesData.find(x => x.id === project.parentId);
+
+    if (!city)
+      throw Error(
+        `Could not find cities associated to building with id: ${buildingId}`
+      );
+
+    const province = provincesData.find(x => x.id === city.parentId);
+
+    if (!province)
+      throw Error(
+        `Could not find province associated to building with id: ${buildingId}`
+      );
 
     return {
       building,
       project,
       city,
-      province,
-      country
+      province
     };
   };
 }
