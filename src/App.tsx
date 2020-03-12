@@ -1,14 +1,22 @@
 import * as React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import LogEntryWizard from "./components/log-entry/LogEntryWizard";
+import Fab from "@material-ui/core/Fab";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import ScrollTop from "./components/ScrollTop";
+import AppHeader from "./components/AppHeader";
+import Home from "./components/log-entry/Home";
 import appTheme from "./theme";
 
 export default () => (
   <React.Fragment>
-    <CssBaseline />
     <ThemeProvider theme={appTheme}>
-      <LogEntryWizard />
+      <AppHeader />
+      <Home />
+      <ScrollTop>
+        <Fab color="secondary" size="small" aria-label="scroll back to top">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
     </ThemeProvider>
   </React.Fragment>
 );

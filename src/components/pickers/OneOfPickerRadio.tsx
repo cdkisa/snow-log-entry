@@ -4,16 +4,9 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Radio from "@material-ui/core/Radio";
 import Typography from "@material-ui/core/Typography";
 import { useField } from "formik";
-import { PropTypes } from "@material-ui/core";
+import { IOneOfPickerRadioProps } from "./types";
 
-interface Props {
-  title: string;
-  items?: any[];
-  name: string;
-  value?: number;
-}
-
-const OneOfPicker = ({ title, name }: Props) => {
+const OneOfPicker = ({ title, name }: IOneOfPickerRadioProps) => {
   const [field, meta, helpers] = useField(name);
   const { value, error } = meta;
   const { setValue } = helpers;
@@ -24,7 +17,7 @@ const OneOfPicker = ({ title, name }: Props) => {
   };
 
   return (
-    <Grid container spacing={1} alignItems="center">
+    <Grid container spacing={1} justify="center" alignItems="center">
       {isError && (
         <Grid item xs={12}>
           <FormHelperText error>{error}</FormHelperText>

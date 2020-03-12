@@ -1,28 +1,44 @@
 import * as React from "react";
-import { useFormikContext } from "formik";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import FormLayout from "../FormLayout";
+import { FormikProps } from "formik";
+import { CommentsValidationSchema } from "../ValidationSchemas";
 
-const FormBody = () => {
-  const { values, errors, setFieldValue } = useFormikContext();
-
-  return (
-    <React.Fragment>
-      <Grid container spacing={4}>
-        <Grid item xs>
-          <TextField
-            fullWidth
-            multiline
-            rowsMax="4"
-            value={values.comments}
-            onChange={e => setFieldValue("comments", e.target.value)}
-            error={Boolean(errors.comments)}
-            helperText={Boolean(errors.comments) && errors.comments}
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
-  );
+const CommentsInitialValues = {
+  comments: ""
 };
 
-export default FormBody;
+export default () => {
+  const handleSubmit = (values: any) => console.log("comments", values);
+  return (
+    <FormLayout
+      title={"Enter Comments"}
+      initialValues={CommentsInitialValues}
+      validationSchema={CommentsValidationSchema}
+      onSubmit={handleSubmit}
+    >
+      {(formikProps: FormikProps<any>) => (
+        <Grid container spacing={4}>
+          <Grid item xs>
+            <TextField
+              fullWidth
+              multiline
+              rowsMax="4"
+              variant="outlined"
+              value={formikProps.values.comments}
+              onChange={e =>
+                formikProps.setFieldValue("comments", e.target.value)
+              }
+              error={Boolean(formikProps.errors.comments)}
+              helperText={
+                Boolean(formikProps.errors.comments) &&
+                formikProps.errors.comments
+              }
+            />
+          </Grid>
+        </Grid>
+      )}
+    </FormLayout>
+  );
+};

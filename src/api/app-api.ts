@@ -1,23 +1,32 @@
-import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
-
 class AppApi {
-  get buildingId() {
-    return localStorage.getItem("buildingId");
+  get buildingId(): string {
+    const v = localStorage.getItem("buildingId");
+    return v ? v : "";
   }
-  set buildingId(value: any) {
+  set buildingId(value: string) {
     localStorage.setItem("buildingId", value);
   }
 
-  get startDateTime(): Date | null {
-    const result = localStorage.getItem("startDateTime");
-    console.log("get startDateTime", result);
-    if (typeof result === "string" && result.length > 0) {
-      return new Date(parseInt(result, 10));
-    }
-    return null;
+  get startDateTime(): string | null {
+    return localStorage.getItem("startDateTime");
   }
-  set startDateTime(value: Date | null) {
-    localStorage.setItem("startDateTime", value!.getTime().toString());
+  set startDateTime(value: string | null) {
+    localStorage.setItem("startDateTime", value!);
+  }
+
+  get projectId(): string {
+    const v = localStorage.getItem("projectId");
+    return v ? v : "0";
+  }
+  set projectId(value: string) {
+    localStorage.setItem("projectId", value);
+  }
+
+  get endDateTime(): string | null {
+    return localStorage.getItem("endDateTime");
+  }
+  set endDateTime(value: string | null) {
+    localStorage.setItem("endDateTime", value!);
   }
 }
 

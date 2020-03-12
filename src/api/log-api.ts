@@ -16,8 +16,8 @@ const zonesData = [
   },
   {
     id: 4,
-    name: "parkingLot",
-    label: "Parking Lot"
+    name: "ramps",
+    label: "Ramps"
   }
 ];
 
@@ -49,25 +49,6 @@ const choicesData = [
     id: 2,
     name: "no",
     label: "No"
-  }
-];
-
-const weatherData = [
-  {
-    id: 1,
-    label: "Snow"
-  },
-  {
-    id: 2,
-    label: "Rain"
-  },
-  {
-    id: 3,
-    label: "Freezing Rain"
-  },
-  {
-    id: 4,
-    label: "No precipitation"
   }
 ];
 
@@ -103,9 +84,6 @@ class LogApi {
 
   fetchChoices = async () => choicesData;
   fetchChoice = async id => choicesData.find(x => x.id === id);
-
-  fetchWeathers = async () => weatherData;
-  fetchWeather = async id => weatherData.find(x => x.id === id);
 }
 
 export default new LogApi();

@@ -7,7 +7,7 @@ import { useField } from "formik";
 import { PropTypes } from "@material-ui/core";
 
 interface Props {
-  title: string;
+  title?: string;
   items: any[];
   name: string;
   value?: any;
@@ -29,7 +29,7 @@ const OneOfPicker = ({ title, items, name }: Props) => {
   const { value, error } = meta;
   const { setValue } = helpers;
 
-  const isSelected = (v: number): Selected =>
+  const isSelected = (v: string): Selected =>
     v === value
       ? { variant: Variant.Contained, color: "primary" }
       : { variant: Variant.Outlined, color: "default" };
@@ -38,32 +38,37 @@ const OneOfPicker = ({ title, items, name }: Props) => {
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <FormHelperText
-          error={isError}
-          component={() => (
-            <Typography color={isError ? "error" : "initial"}>
-              {title}
-            </Typography>
-          )}
-        />
-      </Grid>
+      {title && (
+        <Grid item xs={12}>
+          <FormHelperText
+            error={isError}
+            component={() => (
+              <Typography color={isError ? "error" : "initial"}>
+                {title}
+              </Typography>
+            )}
+          />
+        </Grid>
+      )}
       {isError && <FormHelperText error>{error}</FormHelperText>}
       {items &&
-        items.map((item, index) => (
-          <Grid key={`${index}_${item.id}`} item xs={12} sm>
-            <Button
-              fullWidth
-              value={item.id}
-              type="button"
-              onClick={e => setValue(item.id)}
-              variant={isSelected(item.id).variant}
-              color={isSelected(item.id).color}
-            >
-              {item.label}
-            </Button>
-          </Grid>
-        ))}
+        items.map((item, index) => {
+          const idAsString = item.id.toString();
+          return (
+            <Grid key={`${index}_${idAsString}`} item xs={12} sm>
+              <Button
+                fullWidth
+                value={idAsString}
+                type="button"
+                onClick={e => setValue(idAsString)}
+                variant={isSelected(idAsString).variant}
+                color={isSelected(idAsString).color}
+              >
+                {item.label || item.name || "? text ?"}
+              </Button>
+            </Grid>
+          );
+        })}
     </Grid>
   );
 };

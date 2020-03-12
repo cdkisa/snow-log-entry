@@ -1,19 +1,15 @@
 import * as React from "react";
 import { useField } from "formik";
-import { DateTimePicker } from "@material-ui/pickers";
+import { TimePicker } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { ITimePickerFieldProps } from "./types";
 
-interface Props {
-  name: string;
-  onAfterChange?: (value: MaterialUiPickersDate) => void;
-  label: string;
-  fullWidth: boolean;
-  format: string;
-  minutesStep: number;
-  minDate?: Date;
-}
-
-const DateTimePickerField = ({ name, onAfterChange, ...other }: Props) => {
+export default ({
+  name,
+  onAfterChange,
+  minuteStep,
+  ...other
+}: ITimePickerFieldProps) => {
   const [field, meta, helpers] = useField(name);
   const { value, error } = meta;
   const { setValue } = helpers;
@@ -25,15 +21,14 @@ const DateTimePickerField = ({ name, onAfterChange, ...other }: Props) => {
   };
 
   return (
-    <DateTimePicker
+    <TimePicker
       name={name}
       value={value}
       error={Boolean(error)}
-      helperText={error}
+      helperText={error || other.helperText}
       onChange={x => setDateValue(x)}
+      minutesStep={minuteStep}
       {...other}
     />
   );
 };
-
-export default DateTimePickerField;
